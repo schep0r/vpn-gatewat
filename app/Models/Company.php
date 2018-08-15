@@ -19,4 +19,33 @@ class Company extends Model
     {
         return $this->hasMany('App\Models\User');
     }
+
+    /**
+     * Get the company's quota amount.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getQuotaAttribute($value)
+    {
+        $quota = $value;
+
+        if ($quota > 1000000000000) {
+            return number_format($quota/1000000000000, 2) . " TB";
+        }
+
+        if ($quota > 1000000000) {
+            return number_format($quota/1000000000, 2) . " GB";
+        }
+
+        if ($quota > 1000000) {
+            return number_format($quota/1000000, 2) . " MB";
+        }
+
+        if ($quota > 1000) {
+            return number_format($quota/1000, 2) . " KB";
+        }
+
+        return $quota . " B";
+    }
 }

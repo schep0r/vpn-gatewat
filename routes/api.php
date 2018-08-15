@@ -13,7 +13,10 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/companies', 'CompanyController@index');
-Route::post('/companies', 'CompanyController@store');
-Route::put('/companies/{id}', 'CompanyController@update');
-Route::delete('/companies/{id}', 'CompanyController@destroy');
+Route::resource('companies', 'CompanyController', [
+    'only' => ['index', 'store', 'update', 'destroy']
+]);
+
+Route::resource('users', 'UserController', [
+    'only' => ['index', 'store', 'update', 'destroy']
+]);
