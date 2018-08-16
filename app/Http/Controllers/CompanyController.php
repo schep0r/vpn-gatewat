@@ -19,6 +19,7 @@ class CompanyController extends Controller
         $validatedData = $request->validated();
 
         $company = Company::create($validatedData);
+        $company = Company::find($company->id);
 
         return response()->json($company, 201);
     }

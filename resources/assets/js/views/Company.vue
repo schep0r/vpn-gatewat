@@ -1,6 +1,15 @@
 <template>
     <div id="companies">
-        <h3>Companies</h3>
+        <h3>
+            Companies
+            <div class="float-right">
+                <button class="btn btn-sm btn-primary" v-show="!formAble" v-on:click="toggleForm">Add</button>
+                <button class="btn btn-sm btn-secondary" v-show="formAble" v-on:click="toggleForm">Close</button>
+            </div>
+        </h3>
+
+        <company-form v-show="formAble" v-on:add-company="formSubmitMethod"></company-form>
+
         <table class="table">
             <thead>
                 <tr>
@@ -25,16 +34,18 @@
 
 <script>
     import axios from 'axios'
+    import CompanyForm from './CompanyForm'
 
     export default {
         name: 'companies',
+        components: { CompanyForm },
         data: function () {
             return {
                 companies: [],
+                formAble: false,
             }
         },
         created: function () {
-            console.log('created');
             var vm = this;
             axios.get('http://127.0.0.1:8000/api/companies')
                 .then(function(response){
@@ -42,6 +53,12 @@
                 })
         },
         methods: {
+            toggleForm: function () {
+                this.formAble = !this.formAble;
+            },
+            formSubmitMethod: function (data) {
+                this.companies.push(data);
+            },
             destroy: function (company) {
                 var approved = confirm('Are you sure?');
                 if (approved) {

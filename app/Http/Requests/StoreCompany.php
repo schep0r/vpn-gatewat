@@ -23,7 +23,7 @@ class StoreCompany extends FormRequest
     {
         return [
             'name' => 'required|max:255',
-            'quota' => 'required'
+            'quota' => 'required|numeric'
         ];
     }
 }

@@ -30,19 +30,19 @@ class Company extends Model
     {
         $quota = $value;
 
-        if ($quota > 1000000000000) {
+        if ($quota >= 1000000000000) {
             return number_format($quota/1000000000000, 2) . " TB";
         }
 
-        if ($quota > 1000000000) {
+        if ($quota >= 1000000000) {
             return number_format($quota/1000000000, 2) . " GB";
         }
 
-        if ($quota > 1000000) {
+        if ($quota >= 1000000) {
             return number_format($quota/1000000, 2) . " MB";
         }
 
-        if ($quota > 1000) {
+        if ($quota >= 1000) {
             return number_format($quota/1000, 2) . " KB";
         }
 
