@@ -1,24 +1,28 @@
 <template>
     <div id="company-form">
-        <legend v-if="company.id !== ''">Edit Company</legend>
-        <legend v-else>New Company</legend>
-        <div>
-            <div class="form-group">
-                <label for="company-name">Name</label>
-                <input type="text" v-model="company.name" class="form-control" v-bind:class="{ 'is-invalid': errors.name }" id="company-name" placeholder="Name">
-                <div v-show="errors.name" class="invalid-feedback">
-                    <p v-for="error in errors.name"> {{ error }} </p>
+        <div class="card">
+            <div class="card-body">
+                <legend v-if="company.id !== ''">Edit Company</legend>
+                <legend v-else>New Company</legend>
+                <div>
+                    <div class="form-group">
+                        <label for="company-name">Name</label>
+                        <input type="text" v-model="company.name" class="form-control" v-bind:class="{ 'is-invalid': errors.name }" id="company-name" placeholder="Name">
+                        <div v-show="errors.name" class="invalid-feedback">
+                            <p v-for="error in errors.name"> {{ error }} </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="company-quota">Quota (Bytes)</label>
+                        <input type="text" v-model="company.quota" class="form-control" v-bind:class="{ 'is-invalid': errors.quota }" id="company-quota" placeholder="Quota (Bytes)">
+                        <div v-show="errors.quota" class="invalid-feedback">
+                            <p v-for="error in errors.quota"> {{ error }} </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary" v-on:click="submitForm">Submit</button>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="company-quota">Quota (B)</label>
-                <input type="text" v-model="company.quota" class="form-control" v-bind:class="{ 'is-invalid': errors.quota }" id="company-quota" placeholder="Quota (B)">
-                <div v-show="errors.quota" class="invalid-feedback">
-                    <p v-for="error in errors.quota"> {{ error }} </p>
-                </div>
-            </div>
-            <div class="form-group">
-                <button class="btn btn-primary" v-on:click="submitForm">Submit</button>
             </div>
         </div>
     </div>

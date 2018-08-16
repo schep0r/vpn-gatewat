@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -20,3 +18,6 @@ Route::resource('companies', 'CompanyController', [
 Route::resource('users', 'UserController', [
     'only' => ['index', 'store', 'update', 'destroy']
 ]);
+
+Route::get('/report/{month}', 'ReportController@index');
+Route::post('/generate', 'GenerateController@transfer');

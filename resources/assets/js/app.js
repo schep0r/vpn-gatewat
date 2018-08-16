@@ -6,9 +6,12 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter);
 
 import App from './views/App'
-import Company from './views/Company'
-import User from './views/User'
 import Home from './views/Home'
+import User from './views/User'
+import Company from './views/Company'
+import Abuser from './views/Abuser'
+
+const API_URL = 'http://127.0.0.1:8000/api';
 
 const router = new VueRouter({
     mode: 'history',
@@ -27,6 +30,11 @@ const router = new VueRouter({
             path: '/companies',
             name: 'companies',
             component: Company,
+        },
+        {
+            path: '/abusers',
+            name: 'abusers',
+            component: Abuser,
         },
     ],
 });

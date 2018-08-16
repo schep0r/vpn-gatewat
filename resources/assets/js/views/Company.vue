@@ -1,34 +1,40 @@
 <template>
-    <div id="companies">
-        <h3>
-            Companies
-            <div class="float-right">
+    <div id="companies" class="mt-3">
+        <div class="row">
+            <div class="col-md-10">
+                <h3>Companies</h3>
+            </div>
+            <div class="col-md-2 text-right">
                 <button class="btn btn-sm btn-primary" v-show="!formAble" v-on:click="add">Add</button>
                 <button class="btn btn-sm btn-secondary" v-show="formAble" v-on:click="toggleForm">Close</button>
             </div>
-        </h3>
+        </div>
 
         <company-form v-show="formAble" v-on:add-company="addSubmitMethod" v-on:edit-company="editSubmitMethod" v-bind:company="editCompany"></company-form>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Quota</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="company in companies">
-                    <td>{{ company.name }}</td>
-                    <td>{{ company.user_quota_view }}</td>
-                    <td>
-                        <button class="btn btn-sm btn-warning" v-on:click='edit(company)'>edit</button>
-                        <button class="btn btn-sm btn-danger" v-on:click='destroy(company)'>delete</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Quota</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="company in companies">
+                            <td>{{ company.name }}</td>
+                            <td>{{ company.user_quota_view }}</td>
+                            <td>
+                                <button class="btn btn-sm btn-warning" v-on:click='edit(company)'>edit</button>
+                                <button class="btn btn-sm btn-danger" v-on:click='destroy(company)'>delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </template>
 

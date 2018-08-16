@@ -21,6 +21,22 @@ class Company extends Model
         return $this->hasMany('App\Models\User');
     }
 
+    public function scopeQuotaOverDraft($query, $month)
+    {
+        return $query
+            ->select('companies.*')
+            ->addSelect('transfers.*')
+            ->join('users', 'users.company_id', '=', 'companies.id')
+            ->join('transfers', 'transfers.user_id', '=', 'users.id')
+            ->selectRaw('SUM((transfers.transferred) as traffic)')
+            ->groupBy('SUM((transfers.transferred)')
+            ->havingRaw('SUM((transfers.transferred) > ?', [0])
+
+//            ->selectRaw('sum(transfers.transferred) as sum,')
+
+        ;
+    }
+
     /**
      * Get the company's quota amount.
      *
