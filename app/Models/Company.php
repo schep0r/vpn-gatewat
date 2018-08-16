@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Company extends Model
 {
+    protected $appends = array('user_quota_view');
     /**
      * The attributes that are mass assignable.
      *
@@ -26,9 +27,9 @@ class Company extends Model
      * @param  string  $value
      * @return string
      */
-    public function getQuotaAttribute($value)
+    public function getUserQuotaViewAttribute()
     {
-        $quota = $value;
+        $quota = $this->quota;
 
         if ($quota >= 1000000000000) {
             return number_format($quota/1000000000000, 2) . " TB";

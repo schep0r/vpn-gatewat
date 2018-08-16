@@ -20,6 +20,8 @@ class UserController extends Controller
 
         $user = User::create($validatedData);
 
+        $user->company;
+
         return response()->json($user, 201);
     }
 

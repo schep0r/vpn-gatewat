@@ -1,9 +1,13 @@
 <template>
     <div id="users">
         <h3>Users</h3>
-        <button class="btn btn-sm btn-primary" v-show="!addFormAble" v-on:click="toggleAddUserForm">Add</button>
-        <button class="btn btn-sm btn-secondary" v-show="addFormAble" v-on:click="toggleAddUserForm">Close</button>
-        <add-users-form v-show="addFormAble" v-on:submitForm="toggleAddUserForm"></add-users-form>
+        <div class="float-right">
+            <button class="btn btn-sm btn-primary" v-show="!formAble" v-on:click="add">Add</button>
+            <button class="btn btn-sm btn-secondary" v-show="formAble" v-on:click="toggleForm">Close</button>
+        </div>
+
+        <users-form v-show="formAble" v-on:add-user="addSubmitMethod" v-on:edit-user="editSubmitMethod" v-bind:user="selectedUser"></users-form>
+
         <table class="table">
             <thead>
             <tr>
@@ -19,7 +23,7 @@
                 <td>{{ user.email }}</td>
                 <td>{{ user.company.name }}</td>
                 <td>
-                    <a class="btn btn-sm btn-warning" href="#">edit</a>
+                    <button class="btn btn-sm btn-warning" v-on:click="edit(user)">edit</button>
                     <button class="btn btn-sm btn-danger" v-on:click="destroy(user)">delete</button>
                 </td>
             </tr>
@@ -30,15 +34,17 @@
 
 <script>
     import axios from 'axios'
-    import AddUsersForm from "./AddUserForm";
+    import UsersForm from "./UserForm";
 
     export default {
         name: 'users',
-        components: {AddUsersForm},
+        components: { UsersForm },
         data: function () {
             return {
                 users: [],
-                addFormAble: false,
+                selectedUser: {id: '', name: '', email: '', company_id: ''},
+                emptyUser: {id: '', name: '', email: '', company_id: ''},
+                formAble: false,
             }
         },
         created: function () {
@@ -50,8 +56,27 @@
                 })
         },
         methods: {
-            toggleAddUserForm: function () {
-                this.addFormAble = !this.addFormAble;
+            toggleForm: function () {
+                this.formAble = !this.formAble;
+            },
+            addSubmitMethod: function (data) {
+                this.users.push(data);
+            },
+            editSubmitMethod: function (data) {
+                let idx = this.users.indexOf(this.selectedUser);
+                this.users[idx] = data;
+                this.selectedUser = this.emptyUser;
+                this.toggleForm();
+            },
+            add: function () {
+                this.selectedUser = this.emptyUser;
+                this.toggleForm();
+            },
+            edit: function (user) {
+                if (!this.formAble) {
+                    this.toggleForm();
+                }
+                this.selectedUser = user;
             },
             destroy: function (user) {
                 var approved = confirm('Are you sure?');

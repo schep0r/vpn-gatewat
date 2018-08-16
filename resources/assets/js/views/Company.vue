@@ -3,12 +3,12 @@
         <h3>
             Companies
             <div class="float-right">
-                <button class="btn btn-sm btn-primary" v-show="!formAble" v-on:click="toggleForm">Add</button>
+                <button class="btn btn-sm btn-primary" v-show="!formAble" v-on:click="add">Add</button>
                 <button class="btn btn-sm btn-secondary" v-show="formAble" v-on:click="toggleForm">Close</button>
             </div>
         </h3>
 
-        <company-form v-show="formAble" v-on:add-company="formSubmitMethod"></company-form>
+        <company-form v-show="formAble" v-on:add-company="addSubmitMethod" v-on:edit-company="editSubmitMethod" v-bind:company="editCompany"></company-form>
 
         <table class="table">
             <thead>
@@ -21,9 +21,9 @@
             <tbody>
                 <tr v-for="company in companies">
                     <td>{{ company.name }}</td>
-                    <td>{{ company.quota }}</td>
+                    <td>{{ company.user_quota_view }}</td>
                     <td>
-                        <a class="btn btn-sm btn-warning" href="#">edit</a>
+                        <button class="btn btn-sm btn-warning" v-on:click='edit(company)'>edit</button>
                         <button class="btn btn-sm btn-danger" v-on:click='destroy(company)'>delete</button>
                     </td>
                 </tr>
@@ -43,6 +43,7 @@
             return {
                 companies: [],
                 formAble: false,
+                editCompany: {id: '', name: '', quota: ''},
             }
         },
         created: function () {
@@ -56,14 +57,30 @@
             toggleForm: function () {
                 this.formAble = !this.formAble;
             },
-            formSubmitMethod: function (data) {
+            addSubmitMethod: function (data) {
                 this.companies.push(data);
+            },
+            editSubmitMethod: function (data) {
+                let idx = this.companies.indexOf(this.editCompany);
+                this.companies[idx] = data;
+                this.editCompany = {id: '', name: '', quota: ''};
+                this.toggleForm();
+            },
+            add: function () {
+                this.editCompany = {id: '', name: '', quota: ''};
+                this.toggleForm();
+            },
+            edit: function (company) {
+                if (!this.formAble) {
+                    this.toggleForm();
+                }
+                this.editCompany = company;
             },
             destroy: function (company) {
                 var approved = confirm('Are you sure?');
                 if (approved) {
                     var vm = this;
-                    let idx = vm.companies.indexOf(company)
+                    let idx = vm.companies.indexOf(company);
                     axios.delete('http://127.0.0.1:8000/api/companies/' + company.id)
                         .then(function(){
                             vm.companies.splice(idx,1)
