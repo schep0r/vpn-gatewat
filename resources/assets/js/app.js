@@ -5,11 +5,11 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter);
 
-import App from './views/App'
-import Home from './views/Home'
-import User from './views/User'
-import Company from './views/Company'
-import Abuser from './views/Abuser'
+import App from './components/App'
+import Home from './components/Home'
+import User from './components/User'
+import Company from './components/Company'
+import Abuser from './components/Abuser'
 
 const API_URL = 'http://127.0.0.1:8000/api';
 

@@ -7,17 +7,15 @@
                 <div>
                     <div class="form-group">
                         <label for="company-name">Name</label>
-                        <input type="text" v-model="company.name" class="form-control" v-bind:class="{ 'is-invalid': errors.name }" id="company-name" placeholder="Name">
-                        <div v-show="errors.name" class="invalid-feedback">
-                            <p v-for="error in errors.name"> {{ error }} </p>
-                        </div>
+                        <input type="text" v-model="componentCompany.name" class="form-control" v-bind:class="{ 'is-invalid': errors.name }" id="company-name" placeholder="Name">
+
+                        <error-message v-bind:errors="errors.name"></error-message>
                     </div>
                     <div class="form-group">
                         <label for="company-quota">Quota (Bytes)</label>
-                        <input type="text" v-model="company.quota" class="form-control" v-bind:class="{ 'is-invalid': errors.quota }" id="company-quota" placeholder="Quota (Bytes)">
-                        <div v-show="errors.quota" class="invalid-feedback">
-                            <p v-for="error in errors.quota"> {{ error }} </p>
-                        </div>
+                        <input type="text" v-model="componentCompany.quota" class="form-control" v-bind:class="{ 'is-invalid': errors.quota }" id="company-quota" placeholder="Quota (Bytes)">
+
+                        <error-message v-bind:errors="errors.quota"></error-message>
                     </div>
                     <div class="form-group">
                         <button class="btn btn-primary" v-on:click="submitForm">Submit</button>
@@ -29,18 +27,28 @@
 </template>
 
 <script>
+    import ErrorMessage from './ErrorMessage';
+
     export default {
         name: 'company-form',
         props: ['company'],
+        components: { ErrorMessage },
         data: function () {
             return {
+                componentCompany: {},
                 errors: [],
+            }
+        },
+        watch: {
+            company: function(){
+                this.componentCompany = this.company;
+                this.errors = [];
             }
         },
         methods: {
             submitForm: function () {
                 this.errors = [];
-                if (this.company.id !== '') {
+                if (this.componentCompany.id !== '') {
                     this.update();
                 } else {
                     this.store();
@@ -48,9 +56,9 @@
             },
             update: function() {
                 var vm = this;
-                axios.patch('http://127.0.0.1:8000/api/companies/' + this.company.id, this.company)
+                axios.patch('/api/companies/' + this.componentCompany.id, this.componentCompany)
                     .then(function (response) {
-                        vm.company = {
+                        vm.componentCompany = {
                             id: '',
                             name: '',
                             quota: ''
@@ -65,9 +73,9 @@
             },
             store: function () {
                 var vm = this;
-                axios.post('http://127.0.0.1:8000/api/companies', this.company)
+                axios.post('/api/companies', this.componentCompany)
                     .then(function (response) {
-                        vm.company = {
+                        vm.componentCompany = {
                             id: '',
                             name: '',
                             quota: ''

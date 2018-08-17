@@ -4,8 +4,8 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Models\Transfer::class, function (Faker $faker) {
     return [
-        'date' => $faker->dateTimeBetween('-3 month'),
+        'date' => $faker->dateTimeBetween('-6 month'),
         'resource' => $faker->url,
-        'transferred' => $faker->numberBetween(1, 9) * $faker->numberBetween(1, 1000) * 1000 * 1000 * 1000
+        'transferred' => $faker->numberBetween(100, 10000000000000000)
     ];
 });

@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Company extends Model
 {
-    protected $appends = array('user_quota_view');
+    protected $appends = array('user_quota_view', 'user_traffic_view');
+
     /**
      * The attributes that are mass assignable.
      *
@@ -24,45 +25,61 @@ class Company extends Model
     public function scopeQuotaOverDraft($query, $month)
     {
         return $query
-            ->select('companies.*')
-            ->addSelect('transfers.*')
+            ->selectRaw('companies.id, companies.name, companies.quota, SUM(transfers.transferred) as traffic')
             ->join('users', 'users.company_id', '=', 'companies.id')
             ->join('transfers', 'transfers.user_id', '=', 'users.id')
-            ->selectRaw('SUM((transfers.transferred) as traffic)')
-            ->groupBy('SUM((transfers.transferred)')
-            ->havingRaw('SUM((transfers.transferred) > ?', [0])
-
-//            ->selectRaw('sum(transfers.transferred) as sum,')
-
+            ->whereMonth('transfers.date', $month)
+            ->groupBy('companies.id')
+            ->havingRaw('SUM(transfers.transferred) > companies.quota')
+            ->orderBy('traffic', 'DESC')
         ;
     }
 
     /**
      * Get the company's quota amount.
      *
-     * @param  string  $value
      * @return string
      */
     public function getUserQuotaViewAttribute()
     {
-        $quota = $this->quota;
+        $quota = $this->convertSpace($this->quota);
 
-        if ($quota >= 1000000000000) {
-            return number_format($quota/1000000000000, 2) . " TB";
+        return $quota;
+    }
+
+    /**
+     * Get the company's quota amount.
+     *
+     * @return string
+     */
+    public function getUserTrafficViewAttribute()
+    {
+        if ($this->traffic === null) {
+            return;
+        }
+        $quota = $this->convertSpace($this->traffic);
+
+        return $quota;
+    }
+
+    private function convertSpace ($value)
+    {
+        if ($value >= 1000000000000) {
+            return number_format($value/1000000000000, 2) . " TB";
         }
 
-        if ($quota >= 1000000000) {
-            return number_format($quota/1000000000, 2) . " GB";
+        if ($value >= 1000000000) {
+            return number_format($value/1000000000, 2) . " GB";
         }
 
-        if ($quota >= 1000000) {
-            return number_format($quota/1000000, 2) . " MB";
+        if ($value >= 1000000) {
+            return number_format($value/1000000, 2) . " MB";
         }
 
-        if ($quota >= 1000) {
-            return number_format($quota/1000, 2) . " KB";
+        if ($value >= 1000) {
+            return number_format($value/1000, 2) . " KB";
         }
 
-        return $quota . " B";
+        return $value . " B";
     }
 }

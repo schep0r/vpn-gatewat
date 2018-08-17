@@ -33,6 +33,8 @@ class UserController extends Controller
         $user->fill($validatedData);
         $user->save();
 
+        $user->company;
+
         return response()->json($user);
     }
 
