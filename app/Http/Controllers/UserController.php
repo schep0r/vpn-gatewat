@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUser;
+use App\Http\Resources\User as UserResource;
+use App\Http\Resources\UserCollection;
 use App\Models\User;
 
 class UserController extends Controller
 {
     public function index()
     {
-        $users = User::with('company')->get();
-
-        return response()->json($users);
+        return new UserCollection(User::all());
     }
 
     public function store(StoreUser $request)
@@ -20,9 +20,9 @@ class UserController extends Controller
 
         $user = User::create($validatedData);
 
-        $user->company;
-
-        return response()->json($user, 201);
+        return (new UserResource($user))
+            ->response()
+            ->setStatusCode(201);
     }
 
     public function update(StoreUser $request, $id)
@@ -33,9 +33,7 @@ class UserController extends Controller
         $user->fill($validatedData);
         $user->save();
 
-        $user->company;
-
-        return response()->json($user);
+        return new UserResource($user);
     }
 
     public function destroy($id)

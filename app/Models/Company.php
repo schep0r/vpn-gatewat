@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Company extends Model
 {
-    protected $appends = array('user_quota_view', 'user_traffic_view');
-
     /**
      * The attributes that are mass assignable.
      *
@@ -33,53 +31,5 @@ class Company extends Model
             ->havingRaw('SUM(transfers.transferred) > companies.quota')
             ->orderBy('traffic', 'DESC')
         ;
-    }
-
-    /**
-     * Get the company's quota amount.
-     *
-     * @return string
-     */
-    public function getUserQuotaViewAttribute()
-    {
-        $quota = $this->convertSpace($this->quota);
-
-        return $quota;
-    }
-
-    /**
-     * Get the company's quota amount.
-     *
-     * @return string
-     */
-    public function getUserTrafficViewAttribute()
-    {
-        if ($this->traffic === null) {
-            return;
-        }
-        $quota = $this->convertSpace($this->traffic);
-
-        return $quota;
-    }
-
-    private function convertSpace ($value)
-    {
-        if ($value >= 1000000000000) {
-            return number_format($value/1000000000000, 2) . " TB";
-        }
-
-        if ($value >= 1000000000) {
-            return number_format($value/1000000000, 2) . " GB";
-        }
-
-        if ($value >= 1000000) {
-            return number_format($value/1000000, 2) . " MB";
-        }
-
-        if ($value >= 1000) {
-            return number_format($value/1000, 2) . " KB";
-        }
-
-        return $value . " B";
     }
 }
