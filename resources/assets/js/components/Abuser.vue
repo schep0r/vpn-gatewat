@@ -81,7 +81,7 @@
 
                 axios.get("/api/report/" + this.selectedMonth)
                     .then(function(response){
-                        vm.reportCompanies = response.data;
+                        vm.reportCompanies = response.data.data;
                         vm.reportInProgress = false;
                         vm.reported = true;
                         vm.generated = false;

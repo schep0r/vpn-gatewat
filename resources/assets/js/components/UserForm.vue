@@ -58,7 +58,7 @@
             var vm = this;
             axios.get('/api/companies')
                 .then(function(response){
-                    vm.companies = response.data;
+                    vm.companies = response.data.data;
                 })
         },
         methods: {

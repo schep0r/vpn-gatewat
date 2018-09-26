@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
-use Illuminate\Http\Request;
+use App\Http\Resources\CompanyCollection;
 
 class ReportController extends Controller
 {
@@ -11,6 +11,6 @@ class ReportController extends Controller
     {
         $companies = Company::quotaOverDraft($month)->get();
 
-        return response()->json($companies);
+        return new CompanyCollection($companies);
     }
 }

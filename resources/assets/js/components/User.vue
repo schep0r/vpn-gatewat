@@ -58,7 +58,8 @@
             var vm = this;
             axios.get('/api/users')
                 .then(function(response){
-                    vm.users = response.data;
+                    vm.users = response.data.data;
+                    console.log(vm.users);
                 })
         },
         methods: {
